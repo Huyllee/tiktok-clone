@@ -1,38 +1,39 @@
-import { useStore, actions } from './store';
-import { useRef } from 'react'
+import { Fragment } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { publicRoutes } from '~/routes';
+import { DefaultLayout } from '~/components/Layout';
 
 function App() {
+   return (
+      <Router>
+         <div className="App">
+            <Routes>
+               {publicRoutes.map((route, index) => {
+                  const Page = route.component;
+                  let Layout = DefaultLayout;
 
-  const [state, dispatch] = useStore();
-  const { todos, todoInput } = state;
+                  if (route.layout) {
+                     Layout = route.layout;
+                  } else if (route.layout === null) {
+                     Layout = Fragment;
+                  }
 
-  const inputElement = useRef();
-
-  console.log(state);
-
-  const handleAdd = () => {
-    dispatch(actions.addTodos(todoInput));
-    inputElement.current.focus();
-  }
-
-  return (
-    <div className="App">
-      <input
-        value={todoInput}
-        ref={inputElement}
-        onChange={e => {
-          dispatch(actions.setTodoInput(e.target.value))
-        }}
-      />
-      <button onClick={() => handleAdd()}>Add</button>
-      {todos && todos.length > 0 &&
-        todos.map((item, index) => {
-          return (
-            <li key={index}>{item}</li>
-          )
-        })}
-    </div>
-  );
+                  return (
+                     <Route
+                        path={route.path}
+                        element={
+                           <Layout>
+                              <Page />
+                           </Layout>
+                        }
+                        key={index}
+                     />
+                  );
+               })}
+            </Routes>
+         </div>
+      </Router>
+   );
 }
 
 export default App;
