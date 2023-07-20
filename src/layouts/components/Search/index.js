@@ -7,6 +7,7 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '~/components/AccountItem';
 import styles from './Search.module.scss';
 import { useDebounce } from '~/hooks';
+import { fetchSearchAPI } from '~/services/userService';
 
 const cx = classNames.bind(styles);
 
@@ -25,16 +26,17 @@ function Search() {
          setSearchResult([]);
          return;
       }
-      setLoading(true);
-      fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
-         .then((res) => res.json())
-         .then((res) => {
+
+      const fetchApi = async () => {
+         setLoading(true);
+         const res = await fetchSearchAPI(debounced);
+         if (res && res.data) {
             setSearchResult(res.data);
             setLoading(false);
-         })
-         .catch(() => {
-            setLoading(false);
-         });
+         }
+      };
+
+      fetchApi();
    }, [debounced]);
 
    const handleFocusInput = () => {
@@ -46,6 +48,17 @@ function Search() {
    const handleHideResult = () => {
       setShowResult(false);
    };
+
+   const handleOnChangeInput = (e) => {
+      const keyword = e.target.value;
+      const KEY_SPACE = /\s/g;
+
+      if (!KEY_SPACE.test(keyword[0])) {
+         setSearchValue(keyword);
+      }
+   };
+
+   const handleSubmit = (e) => {};
 
    return (
       <HeadlessTippy
@@ -72,7 +85,7 @@ function Search() {
                value={searchValue}
                placeholder="Search accounts and videos"
                spellCheck={false}
-               onChange={(e) => setSearchValue(e.target.value)}
+               onChange={(e) => handleOnChangeInput(e)}
                onFocus={() => setShowResult(true)}
             />
             {searchValue && !loading && searchValue.length > 0 && (
@@ -83,7 +96,7 @@ function Search() {
 
             {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
 
-            <button className={cx('search-btn')}>
+            <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
                <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
          </div>

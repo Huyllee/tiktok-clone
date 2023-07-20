@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 
 const defaultFn = () => {};
 
-function Menu({ children, items = [], onChange = defaultFn }) {
+function Menu({ children, items = [], hideOnClick = false, onChange = defaultFn }) {
    const [history, setHistory] = useState([{ data: items }]);
    const current = history[history.length - 1]; //biến current được gán giá trị là phần tử cuối cùng trong mảng history.
 
@@ -39,13 +39,14 @@ function Menu({ children, items = [], onChange = defaultFn }) {
          delay={[0, 700]}
          offset={[12, 8]}
          placement="bottom-end"
+         hideOnClick={hideOnClick}
          render={(attrs) => (
             <div className={cx('menu-items')} tabIndex="-1" {...attrs}>
                <PopperWrapper>
                   {history && history.length > 1 && (
                      <Header title="Language" onBack={() => setHistory((prev) => prev.slice(0, prev.length - 1))} />
                   )}
-                  {renderItems()}
+                  <div className={cx('menu-body')}>{renderItems()}</div>
                </PopperWrapper>
             </div>
          )}

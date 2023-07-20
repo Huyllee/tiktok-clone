@@ -6,11 +6,10 @@
    .container {
       width: var(--default-layout-width);
       padding: 0 var(--default-layout-horizontal-spacer);
-      border: 1px solid red;
+      margin-top: var(--default-layout-header-height);
       display: flex;
       .content {
          flex: 1;
-         border: 1px solid blue;
       }
    }
 }
