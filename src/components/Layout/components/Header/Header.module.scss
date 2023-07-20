@@ -14,12 +14,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0 var(--default-layout-horizontal-spacer);
       height: 100%;
       width: var(--default-layout-width);
-      border: 1px solid orange;
 
-      .logo {
-      }
       .search-result,
       .search {
          width: 361px;
@@ -91,15 +89,35 @@
          padding: 5px 12px;
          color: rgba(22, 24, 35, 0.5);
       }
-      .actions {
-      }
    }
+}
+
+//actions
+.actions {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+}
+
+.action-btn {
+   color: #161823;
+   font-size: 2.8rem;
+   background-color: transparent;
+   cursor: pointer;
 }
 
 .more-btn {
    font-size: 2rem;
    margin: 0 28px;
    background-color: transparent;
-   padding: 8px;
+   // padding: 8px;
+   cursor: pointer;
+}
+
+.user-avatar {
+   width: 35px;
+   height: 35px;
+   object-fit: cover;
+   border-radius: 50%;
    cursor: pointer;
 }
