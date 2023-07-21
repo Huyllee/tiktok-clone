@@ -108,7 +108,7 @@ function Header() {
                   </>
                ) : (
                   <>
-                     <Button to="login" text>
+                     <Button to="upload" text>
                         Upload
                      </Button>
                      <Button to="login" primary>
